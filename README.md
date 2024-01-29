@@ -36,3 +36,10 @@ additional features show top 5 comments and some statistics.
 
 # Run
 Go to your bot and send instagram reels link and wait
+
+[forks-url]: https://github.com/suphiyasin/DownloadGram/network/members
+[forks-shield]: https://img.shields.io/github/forks/suphiyasin/DownloadGram.svg?style=for-the-badge
+[stars-shield]: https://img.shields.io/github/stars/suphiyasin/DownloadGram.svg?style=for-the-badge
+[stars-url]: https://github.com/suphiyasin/DownloadGram/stargazers
+[issues-shield]: https://img.shields.io/github/issues/suphiyasin/DownloadGram.svg?style=for-the-badge
+[issues-url]: https://github.com/suphiyasin/DownloadGram/issues
