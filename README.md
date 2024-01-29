@@ -27,7 +27,7 @@ additional features show top 5 comments and some statistics.
 # Requirements
 
 - PHP 7.4 or higher
-- Instagram Proxy or VDS
+- Instagram Proxy
 
 # Installation
 1- Upload api.php and webhook.php to your website. <br/>
