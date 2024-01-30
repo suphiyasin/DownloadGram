@@ -7,7 +7,7 @@
 <br />
 <p align="center">
 <a href="https://github.com/suphiyasin/DownloadGram/">
-<img src="https://i.ibb.co/BPL4Nfb/zaman6.png" alt="zaman6" border="0">
+<img src="https://i.ibb.co/BPL4Nfb/zaman6.png" alt="zaman6" width="100" height="100" border="0">
 
 
 </a>
