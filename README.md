@@ -34,6 +34,10 @@ additional features show top 5 comments and some statistics.
 2- Set Webhook ``` https://api.telegram.org/bot<TOKEN>/setWebhook?url=https://yoursite.com/webhook.php ``` <br/>
 3- Edit webhook.php for your bot token and edit api.php for your proxy informations <br/>
 
+# Updates
+A rate limit was introduced that limits users. <br/>
+1 request is allowed every 60 seconds.
+
 # Run
 Go to your bot and send instagram reels link and wait
 
