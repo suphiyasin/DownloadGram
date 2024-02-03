@@ -3,6 +3,8 @@ class downloadgram{
 	public $BotToken;
 	public $text;
 	public $chatid;
+	public $messageId;
+	public $jsonFilePath = 'users.json';
 	
 	private function setHeader(){
 		$header = [
@@ -35,7 +37,28 @@ class downloadgram{
 		];
 		return $header;
 	}
-	
+
+		public function checkCommandFrequency($userId) {
+    $jsonFilePath = $this->jsonFilePath;
+    $currentTime = time();
+
+    $allowedFrequency = 60; 
+
+    $userData = json_decode(file_get_contents($jsonFilePath), true);
+
+    if (isset($userData[$userId])) {
+        $lastCommandTime = $userData[$userId]['last_command_time'];
+
+        if ($currentTime - $lastCommandTime < $allowedFrequency) {
+            return false;
+        }
+    }
+
+    $userData[$userId]['last_command_time'] = $currentTime;
+    file_put_contents($jsonFilePath, json_encode($userData, JSON_PRETTY_PRINT));
+    
+    return true;
+}
 	
 	public function DownloadVideo($url, $id){
 		$step1 = file_get_contents($url);
@@ -44,11 +67,20 @@ class downloadgram{
 		return $sendRespone;
 	}
 	
-	public function getCheck($text){
+		public function getCheck($text){
 	if(strpos($text, "https://www.instagram.com/reel/") === 0){
 		$step1 = explode("/", $text);
 		$id = $step1[4];
+		$userId = $this->chatid;
+		if ($this->checkCommandFrequency($userId)) {
+
 		$go = $this->getInfo($id);
+} else {
+    	$this->sendMessage("Please wait a moment before trying again...");
+		$go = 'go';
+	
+}
+	
 		return $go;
 	}else{
 		return 'no way';
