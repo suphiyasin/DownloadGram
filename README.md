@@ -37,6 +37,7 @@ additional features show top 5 comments and some statistics.
 # Updates
 A rate limit was introduced that limits users. <br/>
 1 request is allowed every 60 seconds.
+Username or first name information of users who download videos is recorded.
 
 # Run
 Go to your bot and send instagram reels link and wait
