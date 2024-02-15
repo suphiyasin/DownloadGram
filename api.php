@@ -4,6 +4,7 @@ class downloadgram{
 	public $text;
 	public $chatid;
 	public $messageId;
+	public $username;
 	public $jsonFilePath = 'users.json';
 	
 	private function setHeader(){
@@ -55,6 +56,7 @@ class downloadgram{
     }
 
     $userData[$userId]['last_command_time'] = $currentTime;
+    $userData[$userId]['username'] = $this->username;
     file_put_contents($jsonFilePath, json_encode($userData, JSON_PRETTY_PRINT));
     
     return true;
