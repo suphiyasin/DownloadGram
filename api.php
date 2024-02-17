@@ -1,6 +1,5 @@
 <?php
 class downloadgram{
-	public $usertype;
 	public $BotToken;
 	public $text;
 	public $chatid;
