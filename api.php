@@ -2,9 +2,10 @@
 class downloadgram{
 	public $BotToken;
 	public $text;
+	public $username;
 	public $chatid;
 	public $messageId;
-	public $username;
+	public $ustype;
 	public $jsonFilePath = 'users.json';
 	
 	private function setHeader(){
@@ -15,7 +16,7 @@ class downloadgram{
 			'content-type: application/x-www-form-urlencoded',
 			'dpr: 1.25',
 			'origin: https://www.instagram.com',
-			'referer: https://www.instagram.com/reel/C1KLXdRt_71/?igsh=NjZiM2M3MzIxNA%3D%3D',
+			'referer: https://www.instagram.com/reel/',
 			'sec-ch-prefers-color-scheme: light',
 			'sec-ch-ua: "Not A(Brand";v="99", "Google Chrome";v="121", "Chromium";v="121"',
 			'sec-ch-ua-full-version-list: "Not A(Brand";v="99.0.0.0", "Google Chrome";v="121.0.6167.85", "Chromium";v="121.0.6167.85"',
@@ -34,12 +35,13 @@ class downloadgram{
 			'x-fb-lsd: AVprzzL2A3o',
 			'x-ig-app-id: 936619743392459',
 			'accept-encoding: identity',
-			'Cookie: csrftoken=t3e1g4dNDh7FgFWsG7Mk_b; mid=ZbYhagALAAFA7fl8Kps8lxOJj5pi; ig_did=6A60EBF6-0901-4106-80B3-24FB610D9B45; ig_nrcb=1',
+			'Cookie: YOUR COOKIE',
 		];
 		return $header;
 	}
-
-		public function checkCommandFrequency($userId) {
+	
+	
+	public function checkCommandFrequency($userId) {
     $jsonFilePath = $this->jsonFilePath;
     $currentTime = time();
 
@@ -56,6 +58,8 @@ class downloadgram{
     }
 
     $userData[$userId]['last_command_time'] = $currentTime;
+    $currentHourMinute = date('H:i');
+   $userData[$userId]['last_command_hour_minute'] = date('Y-m-d H:i:s');
     $userData[$userId]['username'] = $this->username;
     file_put_contents($jsonFilePath, json_encode($userData, JSON_PRETTY_PRINT));
     
@@ -69,7 +73,7 @@ class downloadgram{
 		return $sendRespone;
 	}
 	
-		public function getCheck($text){
+	public function getCheck($text){
 	if(strpos($text, "https://www.instagram.com/reel/") === 0){
 		$step1 = explode("/", $text);
 		$id = $step1[4];
@@ -92,16 +96,18 @@ class downloadgram{
 	public function getInfo($id){
 		
 		
-		$this->sendMessage("Downloading please wait a few moment");
+		$this->sendMessage("Downloading...");
 		$ch = curl_init();
 		$getHeader = $this->setHeader();
-		$proxyIP = '127.0.0.1';
-		$proxyPort = 8080;
-		$proxyUsername = 'user';
-		$proxyPassword = 'pass';
+		$proxyIP = '';
+		$proxyPort = ;
+		$proxyUsername = '';
+		$proxyPassword = '';
+		// YOUR PROXY INFORMATIONS , IF YOU DONT HAVE PROXY DELETE LANES 
 		curl_setopt($ch, CURLOPT_PROXY, $proxyIP);
 		curl_setopt($ch, CURLOPT_PROXYPORT, $proxyPort);
 		curl_setopt($ch, CURLOPT_PROXYUSERPWD, "$proxyUsername:$proxyPassword");
+
 		curl_setopt($ch, CURLOPT_URL, 'https://www.instagram.com/api/graphql');
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
@@ -115,17 +121,19 @@ class downloadgram{
 		$Comments = $parse["data"]["xdt_shortcode_media"]["edge_media_to_parent_comment"]["edges"];
 		$Owner = $parse["data"]["xdt_shortcode_media"]["owner"]["username"];
 		$totalView = $parse["data"]["xdt_shortcode_media"]["video_view_count"];
+		$strowner = "[$Owner](https://instagram.com/$Owner)";
 		$top5comment = "1-".$Comments[0]['node']['text']." \n 2-".$Comments[1]['node']['text']." \n 3-".$Comments[2]['node']['text']." \n 4-".$Comments[3]['node']['text']." \n 5-".$Comments[4]['node']['text'];
-		$this->text = "---------------------------- \n Total Comments: $totalComment \n Total View: $totalView \n Owner: $Owner \n ---------------------------- \n TOP 5 COMMENTS \n ---------------------------- \n $top5comment \n ---------------------------- \n Coded by @suphi007";
+		$this->text = "---------------------------- \n Total Comments: $totalComment \n Total View: $totalView \n Owner: $strowner \n ---------------------------- \n RANDOM 5 COMMENTS \n ---------------------------- \n $top5comment \n ---------------------------- \n Requested by: ".$this->username."";
 		$this->DownloadVideo($videoUrl, $id);
 		$aga = $this->sendVideo($id);
 		$sendRespone = '{"status": "ok", "responsefromtg": "'.addslashes($aga).'"}';
 		return $sendRespone;
 	}
 	
-	public function sendVideo($id, $chatid = null, $text = null){
+	public function sendVideo($id, $chatid = null, $text = null, $mesid = null){
 		$caption = $text ?? $this->text;
 		$chatId = $chatid ?? $this->chatid;
+		$mesid = $mesid ?? $this->messageId;
 		$botToken = $this->BotToken;
 		$videoPath = './videos/'.$id.'.mp4';
 		$apiUrl = "https://api.telegram.org/bot{$botToken}/sendVideo";
@@ -133,6 +141,7 @@ class downloadgram{
 			'chat_id' => $chatId,
 			'video' => new CURLFile($videoPath),
 			'caption' => $caption,
+			'parse_mode' => 'Markdown',
 		];
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $apiUrl);
